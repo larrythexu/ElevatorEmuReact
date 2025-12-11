@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { Elevator } from '../types.ts';
 
 interface ElevatorSetupProps {
     onInitialized: () => void;
@@ -27,7 +28,12 @@ export function ElevatorSetup({ onInitialized }: ElevatorSetupProps) {
                 throw new Error(`Failed to initialize elevators: ${response.statusText}`);
             }
 
-            onInitialized();
+            // Verify we have elevators
+            const data = await response.json() as Elevator[];
+            console.log(data);
+            if (Array.isArray(data) && data.length > 0) {
+                onInitialized();
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
         } finally {

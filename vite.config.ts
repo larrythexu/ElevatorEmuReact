@@ -16,6 +16,11 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
+      },
+      '/emulator': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
       }
     },
   },
