@@ -1,10 +1,13 @@
 import { useElevator } from "../hooks/useElevator.tsx";
 import { useState } from "react";
-import type { Elevator } from "../types.ts";
+import type { Elevator, SelectorType } from "../types.ts";
 
 export function ElevatorController() {
     const [isRunning, setIsRunning] = useState(false);
     const [floorRequest, setFloorRequest] = useState(0);
+    const [requestSelectorType, setRequestSelectorType] = useState<SelectorType>("SimpleSelector")
+    const [currentSelector, setCurrentSelector] = useState<SelectorType>("SimpleSelector")
+    const [elevatorSpeed, setElevatorSpeed] = useState(4000);
     const [assignedElevator, setAssignedElevator] = useState<Elevator | null>(null);
 
     // Websocket hook
@@ -58,6 +61,40 @@ export function ElevatorController() {
         }
     };
 
+    const handleSelectorType = async () => {
+        if (currentSelector === requestSelectorType) { return; }
+
+        try {
+            const response = await fetch(`/strategy/${requestSelectorType}`, { method: 'POST', });
+
+            if (!response.ok) {
+                throw new Error(`Failed to set selector type: ${response.statusText}`);
+            }
+
+            setCurrentSelector(requestSelectorType);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleElevatorSpeed = async () => {
+        if (elevatorSpeed < 1000) {
+            setElevatorSpeed(1000);
+        } else if (elevatorSpeed > 10000) {
+            setElevatorSpeed(10000);
+        }
+
+        try {
+            const response = await fetch(`/emulator/delay/${elevatorSpeed}`, { method: 'POST', });
+
+            if (!response.ok) {
+                throw new Error(`Failed to set elevator speed: ${response.statusText}`);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
         <div>
             <h2>Elevator States</h2>
@@ -75,13 +112,33 @@ export function ElevatorController() {
                         id="floorRequest"
                         type="number"
                         min="0"
-                        max="20"
+                        max="100"
                         placeholder='Floor'
-                        value={floorRequest || ''}
+                        value={floorRequest ?? ''}
                         onChange={(e) => setFloorRequest(Number(e.target.value))}
                     />
-
                     <button onClick={() => { void handleRequestFloor() }}>Request Floor</button>
+                </div>
+
+                <div style={{ margin: 'auto', width: '100%', gap: '1rem' }}>
+                    <select name="selectorType" id="selector" value={requestSelectorType}
+                        onChange={(selector) => setRequestSelectorType(selector.target.value as SelectorType)}>
+                        <option value="SimpleSelector">Simple Selector</option>
+                        <option value="ProximitySelector">Proximity Selector</option>
+                    </select>
+                    <button onClick={() => { void handleSelectorType() }}>Set Selector Strategy</button>
+
+                    <input
+                        id="elevatorSpeed"
+                        type="number"
+                        min="1000"
+                        max="10000"
+                        step="500"
+                        placeholder='(ms)'
+                        value={elevatorSpeed ?? ''}
+                        onChange={(speed) => setElevatorSpeed(Number(speed.target.value))}
+                    />
+                    <button onClick={() => { void handleElevatorSpeed() }}>Set Elevator Speed (ms)</button>
                 </div>
             </div>
 
