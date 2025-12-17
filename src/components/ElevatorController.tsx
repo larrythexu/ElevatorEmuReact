@@ -19,7 +19,7 @@ export function ElevatorController() {
         setIsRunning(true);
 
         try {
-            const response = await fetch('/emulator/start', { method: 'POST', });
+            const response = await fetch('/api/emulator/start', { method: 'POST', });
 
             if (!response.ok) {
                 throw new Error(`Failed to start emulator: ${response.statusText}`);
@@ -35,7 +35,7 @@ export function ElevatorController() {
         setIsRunning(false);
 
         try {
-            const response = await fetch('/emulator/stop', { method: 'POST', });
+            const response = await fetch('/api/emulator/stop', { method: 'POST', });
 
             if (!response.ok) {
                 throw new Error(`Failed to stop emulator: ${response.statusText}`);
@@ -47,7 +47,7 @@ export function ElevatorController() {
 
     const handleRequestFloor = async () => {
         try {
-            const response = await fetch(`/elevators/request-floor/${floorRequest}`, { method: 'POST', });
+            const response = await fetch(`/api/elevators/request-floor/${floorRequest}`, { method: 'POST', });
 
             if (!response.ok) {
                 throw new Error(`Failed to request floor: ${response.statusText}`);
@@ -65,7 +65,7 @@ export function ElevatorController() {
         if (currentSelector === requestSelectorType) { return; }
 
         try {
-            const response = await fetch(`/strategy/${requestSelectorType}`, { method: 'POST', });
+            const response = await fetch(`/api/strategy/${requestSelectorType}`, { method: 'POST', });
 
             if (!response.ok) {
                 throw new Error(`Failed to set selector type: ${response.statusText}`);
@@ -85,7 +85,7 @@ export function ElevatorController() {
         }
 
         try {
-            const response = await fetch(`/emulator/delay/${elevatorSpeed}`, { method: 'POST', });
+            const response = await fetch(`/api/emulator/delay/${elevatorSpeed}`, { method: 'POST', });
 
             if (!response.ok) {
                 throw new Error(`Failed to set elevator speed: ${response.statusText}`);

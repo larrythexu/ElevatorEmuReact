@@ -12,21 +12,11 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/elevators': {
+      '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
-      },
-      '/emulator': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/strategy': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        secure: false,
-      },
+      }
     },
   },
 })

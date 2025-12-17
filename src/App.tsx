@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     const checkInitialization = async () => {
       try {
-        const response = await fetch('/elevators')
+        const response = await fetch('/api/elevators')
         if (response.ok) {
           const data = await response.json() as Elevator[]
           if (Array.isArray(data) && data.length > 0) {

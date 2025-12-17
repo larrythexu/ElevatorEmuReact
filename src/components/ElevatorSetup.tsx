@@ -20,7 +20,7 @@ export function ElevatorSetup({ onInitialized }: ElevatorSetupProps) {
 
         setLoading(true);
         try {
-            const response = await fetch(`/elevators/add-elevator/${numberOfElevators}`, {
+            const response = await fetch(`/api/elevators/add-elevator/${numberOfElevators}`, {
                 method: 'POST',
             });
 
