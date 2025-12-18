@@ -6,7 +6,7 @@ import { Client } from "@stomp/stompjs";
 export function useElevator() {
     const [elevators, setElevators] = useState<Elevator[]>([]);
 
-    const WS_URL = "ws://localhost:8080/ws";
+    // const WS_URL = "/ws";
     const WS_TOPIC = "/topic/elevator/states";
     // For accessing client later
     const stompClientRef = useRef<Client | null>(null);
@@ -14,7 +14,7 @@ export function useElevator() {
     useEffect(() => {
         // Websocket client config
         const client = new Client({
-            brokerURL: WS_URL,
+            brokerURL: "/ws",
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
